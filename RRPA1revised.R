@@ -1,19 +1,36 @@
 # RRPA1revised.R
 # RRPA1.R alternate version
 
-# read the dataset
+#############################################################
+################   CODE TO READ DATA   ######################
+#############################################################
 activ <- read.csv("activity.csv")
-# process the data
-stepvec <- activ[,1]
-myindex <- seq(1,17568, 288) # creates index containing first row number for each day
-daysums <- c() # sets up vector to contain amount of steps taken in each of 61 days 
+
+#############################################################
+################   PROCESSING CODE   ########################
+#############################################################
+intervalID <- rep(1:288,61) 
+dateID <- rep(1:61, each = 288)
+activ <- cbind(activ, dateID, intervalID)
+
+#############################################################
+################   ANALYSIS CODE     ########################
+#############################################################
+
+daysums <- c()
 for (i in 1:61){
-        dbeg <- myindex[i]
-        dend <- myindex[i]+287
-        daysum <- sum(stepvec[dbeg:dend], na.rm=TRUE)
-        daysums <- c(daysums, daysum)
+        value <- sum(activ[activ$dateID == i,1], na.rm=TRUE)
+        daysums <- c(daysums, value)
+}
+intervalmeans <- c()
+for (i in 1:288){
+        value2 <- mean(activ[activ$intervalID == i,1], na.rm=TRUE)
+        intervalmeans <- c(intervalmeans,value2)
 }
 
+#############################################################
+################   PLOTTING CODE   ##########################
+#############################################################
 # create histogram of total steps per day
 par(mar = c(4,4,3,1)) 
 hist (daysums, breaks =8, col ="steelblue", 
@@ -27,4 +44,4 @@ medianpaste <- paste ("Median total amount of steps per day is", mymedian)
 print (meanpaste)
 print (medianpaste)
 
-intervalvec <- activ[,3]
+
