@@ -7,17 +7,18 @@ output:
 
 
 ## Loading and preprocessing the data
-```{r load_data, echo=TRUE}
+
+```r
 activ <- read.csv("~/activity.csv")
 intervalID <- rep(1:288,61) 
 dateID <- rep(1:61, each = 288)
 activ <- cbind(activ, dateID, intervalID)
-
 ```
 
 
 ## What is mean total number of steps taken per day?
-```{r total_steps, echo=TRUE}
+
+```r
 daysums <- c()
 for (i in 1:61){
         value <- sum(activ[activ$dateID == i,1], na.rm=TRUE)
@@ -30,18 +31,34 @@ hist (daysums, breaks =8, col ="steelblue",
       main = "Histogram of Total Steps Taken per Day",
       xlab = "Total Steps per Day", ylab = "Frequency in Days",
       xlim = c(0, 25000))
+```
 
+![plot of chunk total_steps](figure/total_steps.png) 
+
+```r
 mymean <- round(mean(daysums), 2)
 mymedian <- median(daysums)
 meanpaste <- paste ("Mean total amount of steps per day is", mymean)
 medianpaste <- paste ("Median total amount of steps per day is", mymedian)
 print (meanpaste)
+```
+
+```
+## [1] "Mean total amount of steps per day is 9354.23"
+```
+
+```r
 print (medianpaste)
+```
+
+```
+## [1] "Median total amount of steps per day is 10395"
 ```
 
 
 ## What is the average daily activity pattern?
-```{r average_daily, echo=TRUE}
+
+```r
 intervalmeans <- c()
 for (i in 1:288){
         value2 <- mean(activ[activ$intervalID == i,1], na.rm=TRUE)
@@ -53,22 +70,34 @@ plot(intervalmeans, type="l", col="palegreen2",
      xlab = "Interval ID (0='0:00', 288='23:55')", 
      ylab = "Average number of steps",
      xlim = c(0,288))
+```
 
+![plot of chunk average_daily](figure/average_daily.png) 
+
+```r
 maxinterval <- which(intervalmeans == max(intervalmeans))
 maxintvalue <- activ[maxinterval,3]
 maxpaste <- paste ("The interval that, on average, contains the largest amount of steps is ", 
                 maxintvalue, ". It is represented as IntervalID", maxinterval, 
                 "on the attached plot.")
 print(maxpaste)
+```
 
+```
+## [1] "The interval that, on average, contains the largest amount of steps is  835 . It is represented as IntervalID 104 on the attached plot."
 ```
 ## Imputing missing values
 ### 1. Calculate and report total number of missing values
-```{r missing_values, echo=TRUE}
+
+```r
 missing <- which(is.na(activ$steps)) # gives rows in which steps measurements are NA
 totalmiss <- length(missing)
 missingpaste <- paste ("There are", totalmiss, "missing values.")
 print (missingpaste)
+```
+
+```
+## [1] "There are 2304 missing values."
 ```
 
 ### 2. Devise a strategy for filling in missing values
@@ -83,7 +112,8 @@ for every row in "missing":
 identify the interval containing the missing data, using intervalID
 get the value of intervalmeans[that particular intervalID]
 replace the NA for that row with the obtained value
-```{r imputed_data, echo=TRUE}
+
+```r
 activ2 <- activ
 for (i in 1:length(missing)) {
         val1 <- missing[i] # get the row number
@@ -94,7 +124,8 @@ for (i in 1:length(missing)) {
 ```
 
 ### 4. Make a histogram of the total number of steps taken each day and calculate and report the mean and median number of steps taken each day.
-```{r imputed_totalsteps, echo=TRUE}
+
+```r
 daysums2 <- c()
 for (i in 1:61){
         value2 <- sum(activ2[activ2$dateID == i,1], na.rm=TRUE)
@@ -105,7 +136,11 @@ hist (daysums2, breaks =8, col ="dodgerblue2",
       main = "Histogram of Total Steps Taken per Day (NAs Imputed)",
       xlab = "Total Steps per Day", ylab = "Frequency in Days",
       xlim = c(0, 25000), ylim = c(0,25))
+```
 
+![plot of chunk imputed_totalsteps](figure/imputed_totalsteps.png) 
+
+```r
 mymean2 <- round(mean(daysums), 2)
 mymedian2 <- median(daysums)
 
@@ -113,13 +148,25 @@ meanpaste2 <- paste ("With NAs imputed, mean total amount of steps per day is", 
 medianpaste2 <- paste ("With NAs imputed, median total amount of steps per day is", mymedian2)
 
 print (meanpaste2)
+```
+
+```
+## [1] "With NAs imputed, mean total amount of steps per day is 9354.23"
+```
+
+```r
 print (medianpaste2)
+```
+
+```
+## [1] "With NAs imputed, median total amount of steps per day is 10395"
 ```
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 ### 1. Create a new factor variable with levels "weekday" and "weekend" indicating status of any given day.
-```{r daystatus_variable, echo=TRUE}
+
+```r
 myweek <- rep("Weekday", 1440)
 myweekend <- rep("Weekend", 576)
 wholeweek <- c(myweek, myweekend)
@@ -130,7 +177,8 @@ activ2 <- cbind(activ2,  daycategory)
 
 ### 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
-```{r timeseries_panel, echo=TRUE}
+
+```r
 activ3 <- activ2[activ2$dateID == 1|activ2$dateID == 41,] # data frame with 1 wkdy, 1 wknd, imputed mean values
 
 library(lattice)
@@ -144,5 +192,7 @@ xyplot(steps~intervalID|daycategory, data = activ3,
        ylab="Average Steps",
        panel = mypanel)
 ```
+
+![plot of chunk timeseries_panel](figure/timeseries_panel.png) 
 
 
