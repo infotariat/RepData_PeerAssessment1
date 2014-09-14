@@ -1,9 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
@@ -33,7 +28,7 @@ hist (daysums, breaks =8, col ="steelblue",
       xlim = c(0, 25000))
 ```
 
-![plot of chunk total_steps](figure/total_steps.png) 
+![plot of chunk total_steps](./PA1_template_files/figure-html/total_steps.png) 
 
 ```r
 mymean <- round(mean(daysums), 2)
@@ -72,7 +67,7 @@ plot(intervalmeans, type="l", col="palegreen2",
      xlim = c(0,288))
 ```
 
-![plot of chunk average_daily](figure/average_daily.png) 
+![plot of chunk average_daily](./PA1_template_files/figure-html/average_daily.png) 
 
 ```r
 maxinterval <- which(intervalmeans == max(intervalmeans))
@@ -138,7 +133,7 @@ hist (daysums2, breaks =8, col ="dodgerblue2",
       xlim = c(0, 25000), ylim = c(0,25))
 ```
 
-![plot of chunk imputed_totalsteps](figure/imputed_totalsteps.png) 
+![plot of chunk imputed_totalsteps](./PA1_template_files/figure-html/imputed_totalsteps.png) 
 
 ```r
 mymean2 <- round(mean(daysums), 2)
@@ -193,6 +188,6 @@ xyplot(steps~intervalID|daycategory, data = activ3,
        panel = mypanel)
 ```
 
-![plot of chunk timeseries_panel](figure/timeseries_panel.png) 
+![plot of chunk timeseries_panel](./PA1_template_files/figure-html/timeseries_panel.png) 
 
 
